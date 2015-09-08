@@ -72,6 +72,60 @@ Bare bones example:
 		// start watching when the app runs. also starts the Keepalive service by default.
 		Idle.watch();
 	});
+	
+Directive implementation example:
+```
+  // FileName: ngIdle.directive.client.js
+	// include the `ngIdle` module
+	var app = angular.module('directive-demo', ['ngIdle']);
+
+    app.directive('ngIdle', ngIdle);
+
+      ngIdle.$inject = ['Idle'];
+
+      function ngIdle(Idle) {
+          var directive = {
+              restrict: 'A',
+              link: link
+          };
+
+          return directive;
+
+          function link(scope, el) {
+            Idle.watch();
+            console.log(Idle.running());
+            scope.$on('IdleStart', function() {
+                console.log('IDLE HAPPENED');
+            });
+
+        		$scope.$on('IdleWarn', function(e, countdown) {});
+        
+        		$scope.$on('IdleTimeout', function() {});
+        
+        		$scope.$on('IdleEnd', function() {});
+        
+        		$scope.$on('Keepalive', function() {});
+
+          }
+      }
+  })();
+  ```
+  
+ Directive Html implementation:
+  ```
+  <html>
+    <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+      <script src="ngIdle.directive.client.js"></script>
+    </head>
+    <body ngIdle>
+      <h2> ng-idle as a directive example </h2>
+    </body>
+  </html>
+  ```
+  
+
+
 
 You may use `Keepalive` and `Idle` independently if you desire, but they are contained in the same script.
 
